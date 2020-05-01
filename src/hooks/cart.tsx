@@ -79,14 +79,16 @@ const CartProvider: React.FC = ({ children }) => {
     async id => {
       const cart = products.map(p => {
         if (p.id === id) {
-          if (p.quantity > 1) p.quantity -= 1;
+          p.quantity -= 1;
         }
         return p;
       });
 
-      setProducts(cart);
+      const filtered = cart.filter(item => item.quantity > 0);
 
-      await AsyncStorage.setItem('@cart', JSON.stringify(products));
+      setProducts(filtered);
+
+      await AsyncStorage.setItem('@cart', JSON.stringify(filtered));
     },
     [products],
   );
